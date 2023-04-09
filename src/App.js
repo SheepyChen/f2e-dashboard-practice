@@ -1,4 +1,16 @@
 import "./index.css";
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+  Legend,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+} from "chart.js";
+import { Pie, Bar } from "react-chartjs-2";
+import { useNavigate, useLocation } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -12,6 +24,16 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { isEmpty, uniq, head } from "lodash";
+
+ChartJS.register(
+  ArcElement,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const theme = createTheme({
   typography: {
@@ -29,10 +51,21 @@ const theme = createTheme({
 
 function App() {
   const [data, setData] = useState([]);
+  const [submit, setSubmit] = useState(false);
+  const [barData, setBarData] = useState({});
+  const [pieData, setPieData] = useState({});
   const [year, setYear] = useState("110");
   const [county, setCounty] = useState("");
   const [district, setDistrict] = useState("");
   const [groupedByCity, setGroupedByCity] = useState({});
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setSubmit(true);
+    navigate(`/${county}/${district}`);
+  };
 
   const handleYearChange = (event) => {
     setYear(event.target.value);
@@ -42,53 +75,115 @@ function App() {
   };
 
   const handleDistrictChange = (event) => {
+    setSubmit(false);
     setDistrict(event.target.value);
   };
   const fetchPost = async () => {
     const response = await fetch("/api");
-    console.log(response);
+
     if (!response.ok) {
       throw new Error("Something went wrong!");
     }
     const governmentData = await response.json();
     setData(governmentData);
+    const groupedByCity = governmentData.result.records.reduce((acc, obj) => {
+      const city = obj.site_id.slice(0, 3);
+      if (acc[city]) {
+        acc[city].push(obj.site_id);
+      } else {
+        acc[city] = [obj.site_id];
+      }
+      return acc;
+    }, {});
+    setGroupedByCity(groupedByCity);
   };
 
   useEffect(() => {
     fetchPost();
+    const [, countyParam, districtParam] = decodeURIComponent(
+      location.pathname
+    ).split("/");
+    if (countyParam.length === 3 && districtParam.length === 3) {
+      setCounty(countyParam);
+      setDistrict(districtParam);
+      setSubmit(true);
+    }
   }, []);
 
   useEffect(() => {
-    if (!isEmpty(data)) {
-      const groupedByCity = data.result.records.reduce((acc, obj) => {
-        const city = obj.site_id.slice(0, 3);
-        if (acc[city]) {
-          acc[city].push(obj.site_id);
-        } else {
-          acc[city] = [obj.site_id];
+    if (!isEmpty(data) && submit) {
+      const lidataArr = data.result.records.filter(
+        (item) => item.site_id === `${county}${district}`
+      );
+      const result = {};
+      for (const obj of lidataArr) {
+        for (const [key, value] of Object.entries(obj)) {
+          result[key] = (result[key] || 0) + parseInt(value);
         }
-        return acc;
-      }, {});
-      setGroupedByCity(groupedByCity);
-      // const countyOption = Object.values(groupedByCity).map((item) =>
-      //   head(item).slice(0, 3)
-      // );
-      // const districtOption = uniq(groupedByCity[countyOption[1]]).map((item) =>
-      //   item.replace([countyOption[1]], "")
-      // );
+      }
 
-      // const lidataArr = governmentData.result.records.filter(
-      //   (item) => item.site_id === "新北市萬里區"
-      // );
-      // const result = {};
-      // for (const obj of lidataArr) {
-      //   for (const [key, value] of Object.entries(obj)) {
-      //     result[key] = (result[key] || 0) + parseInt(value);
-      //   }
-      // }
+      const barData = {
+        labels: ["共同生活", "獨立生活"],
+        datasets: [
+          {
+            label: "男",
+            data: [result.household_ordinary_m, result.household_single_m],
+            backgroundColor: theme.palette.secondary.main,
+          },
+          {
+            label: "女",
+            data: [result.household_ordinary_f, result.household_single_f],
+            backgroundColor: theme.palette.primary.main,
+          },
+        ],
+      };
+      setBarData(barData);
+      const pieData = {
+        labels: ["共同生活", "獨立生活"],
+        datasets: [
+          {
+            label: "",
+            data: [
+              result.household_ordinary_total,
+              result.household_single_total,
+            ],
+            backgroundColor: [
+              theme.palette.secondary.main,
+              theme.palette.primary.main,
+            ],
+
+            borderWidth: 1,
+          },
+        ],
+      };
+      setPieData(pieData);
     }
-  }, [data]);
+  }, [data, submit]);
 
+  const barOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom",
+      },
+      title: {
+        display: true,
+        text: "人口數統計",
+      },
+    },
+  };
+  const pieOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "bottom",
+      },
+      title: {
+        display: true,
+        text: "戶數統計",
+      },
+    },
+  };
   return (
     <Box
       sx={{
@@ -151,8 +246,6 @@ function App() {
         </Box>
         <Box
           sx={{
-            bgcolor: "#651FF2",
-
             padding: "0px 143.5px 0px 292.5px",
           }}
         >
@@ -167,7 +260,6 @@ function App() {
 
           <Box
             sx={{
-              bgcolor: "#EEEFFF",
               height: "120px",
               width: "100%",
               padding: "40px 0",
@@ -234,7 +326,7 @@ function App() {
               </Select>
             </FormControl>
             <Button
-              // onClick={}
+              onClick={handleSubmit}
               sx={{
                 zIndex: "100",
                 width: "83px",
@@ -256,7 +348,6 @@ function App() {
           >
             <Button
               variant="outlined"
-              // onClick={}
               sx={{
                 zIndex: "100",
                 width: "78px",
@@ -264,9 +355,15 @@ function App() {
                 borderRadius: "16px",
               }}
             >
-              SUBMIT
+              搜尋結果
             </Button>
           </Divider>
+          {!isEmpty(barData) && submit && (
+            <Bar data={barData} options={barOptions} />
+          )}
+          {!isEmpty(barData) && submit && (
+            <Pie data={pieData} options={pieOptions} height={200} />
+          )}
         </Box>
         <footer>
           <div class="container"></div>
