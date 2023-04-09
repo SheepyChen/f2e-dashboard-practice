@@ -1,44 +1,26 @@
-### Need Day Remember 你得記得--記帳 APP
+簡易Dashboard製作
 
-Demo 頁面：https://sheepychen.github.io/need-day-remember/
-登入測試用的帳號或是用email註冊一個新的帳號
-- 帳號：test@iii.com
-- 密碼：123456
+Requirements
 
-## 使用的技術：
+請使用React
+Follow Airbnb coding style
+將程式碼commit 至GitHub
+請以live demo做呈現 (Heroku, Vercel, CodeSandbox, GCP, etc.)
+Typescript 加分
+可使用第三方套件
+Input group
 
-採用 firebase 當資料庫，以 react.js 為框架，樣式使用 Material UI 元件庫，並搭配其他第三方套件產生收入支出圖表及日期選擇等等。
 
-## 設計製作過程
+Submit button: All fields must be selected, otherwise, the button should be disabled
+The selection menus for "縣/市" and "區", need to use autocomplete selector to help users quickly find the desired option
+The selection menu for "區" is disabled until "縣/市" is selected
+When the selection for "縣/市" changes, the value for "區" should be cleared
+Submit and Send Request
 
-1. 先使用Figma繪製草稿，並參考現有記帳excel工具選擇需要的功能與設計
-2. 串接Firebase，註冊firebase創建帳戶並學習修改刪除新增等功能
-3. 用cookie紀錄使用者登入與登出狀態並依照狀態改變畫面
-4. 取得firbase資料後，依據使用者及日期整理資料
-5. 取得想要使用圖表的第三方套件(react-chartjs-2)，把資料整理成第三方套件需要的格式
-6. 學習使用 Material UI 完成記帳css樣式以及整個頁面安排
-7. 表單錯誤處理（沒有值不能送出、金額一定要數字）
-8. 選擇日期使用第三方套件(react-calendar)（預設為當天）
-
-## 現有功能：
-
-1. 註冊&登入功能:包含收驗證信以及錯誤訊息提示。
-2. 預設記帳起始時間為當月，可以按左右切換不同月份。
-3. 可以依據日期新增收入與支出，也可以修改與刪除。
-4. 支出收入的分類目前是寫死的，支出的比例圓餅圖＆整年收支會顯示在右側的圖表。
-5. 可以依記帳名稱搜尋支出項目中該月符合搜尋名稱的支出明細。
-6. 支出類別圖示依類別為不同顏色。
-
-## 待調整的功能：
-
-目前尚未完成：
-- 未登入的時候顯示demo記帳頁面的畫面
-- 忘記密碼重設
-- 錯誤顯示優化(不使用彈出視窗)
-- 類別的底色與pie底色統一
-
-未來預計加入的功能：
-- 用戶自訂網頁theme功能
-- 第三方串接
-- 分頁router做日記的功能
-
+Based on the values of "年", "縣/市", and "區", redirect to a new URL/page and send an API request
+While waiting for the API response, there should be a UI prompt indicating that the page is loading
+Users can also trigger the query by entering "年", "縣/市", and "區" directly into the URL
+Charts
+The charts example in Figma are images because there are no restrictions on how they should be implemented, but we recommend Highcharts
+RWD
+In Figma, only two sizes are specified, so the general principle for implementing other screen sizes is to avoid breaking the layout
