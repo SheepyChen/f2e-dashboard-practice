@@ -10,7 +10,7 @@ import {
   BarElement,
   Title,
 } from "chart.js";
-import { Button, Typography, Divider } from "@mui/material";
+import { Button, Typography, Divider, Box } from "@mui/material";
 import { Pie, Bar } from "react-chartjs-2";
 import { isEmpty } from "lodash";
 
@@ -81,10 +81,23 @@ function Chart(props) {
       </Typography>
 
       {!isEmpty(barData) && submit && (
-        <Bar data={barData} options={barOptions} />
+        <Box
+          sx={{
+            margin: "0 auto",
+          }}
+        >
+          <Bar data={barData} options={barOptions} />
+        </Box>
       )}
       {!isEmpty(barData) && submit && (
-        <Pie data={pieData} options={pieOptions} height={200} />
+        <Box
+          sx={{
+            width: "80%",
+            margin: "0 auto",
+          }}
+        >
+          <Pie data={pieData} options={pieOptions} />
+        </Box>
       )}
     </Fragment>
   );

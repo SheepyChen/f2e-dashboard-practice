@@ -15,6 +15,7 @@ const theme = createTheme({
     },
     secondary: {
       main: "#651FFF",
+      light: "#FFFFFF",
     },
   },
 });
@@ -30,14 +31,14 @@ function App() {
         <header>
           <Box
             sx={{
-              bgcolor: "#651FFF",
+              bgcolor: theme.palette.secondary.main,
               width: "100%",
               height: "48px",
             }}
           >
             <Box
               sx={{
-                color: "rgb(255, 255, 255)",
+                color: theme.palette.secondary.light,
                 position: "absolute",
                 top: "15px",
                 left: "16px",
@@ -49,7 +50,7 @@ function App() {
             </Box>
             <Box
               sx={{
-                color: "rgb(255, 255, 255)",
+                color: theme.palette.secondary.light,
                 position: "absolute",
                 top: "4px",
                 right: "24px",
@@ -68,24 +69,44 @@ function App() {
         <Box
           sx={{
             position: "absolute",
-            top: "56px",
+            top: "300px",
             left: "5%",
-            transform: "translate(-50%, +80%) rotate(90deg)",
+            transform: "translate(-50%, +50%) rotate(90deg)",
             display: "inline-block",
-            borderRadius: 2,
-            background: "linear-gradient(to right, #FF4E50, #F9D423, #1ABC9C)",
+            width: "971px",
+            height: "149px",
+            background:
+              "linear-gradient(to right,  #E60000, #FFCC00, #007F00, #0000CC)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
+            opacity: {
+              xs: "0.12",
+              sm: "0.8",
+              lg: "1",
+            },
+            backgroundClip: "text",
+            textFillColor: "transparent",
           }}
         >
-          <Typography fontSize="200px" fontWeight={700} fontFamily="Ubuntu">
+          <Typography
+            fontSize="200px"
+            fontWeight={700}
+            fontFamily="Ubuntu"
+            lineHeight="74.4%"
+          >
             TAIWAN
           </Typography>
         </Box>
         <SelectSection theme={theme} />
-        <footer>
-          <div class="container"></div>
-        </footer>
+        {/* <footer>
+          <Box
+            sx={{
+              bgcolor: theme.palette.secondary.main,
+              width: "100%",
+              height: "20px",
+            }}
+          />
+        </footer> */}
       </ThemeProvider>
     </Box>
   );

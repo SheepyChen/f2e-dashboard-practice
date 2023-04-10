@@ -11,6 +11,8 @@ import {
   FormControl,
   CircularProgress,
   Grid,
+  Autocomplete,
+  TextField,
 } from "@mui/material";
 import { isEmpty, uniq, head } from "lodash";
 import Chart from "./Chart";
@@ -73,7 +75,7 @@ function SelectSection(props) {
 
   useEffect(() => {
     fetchPost();
-    const [, countyParam, districtParam] = decodeURIComponent(
+    const [, year, countyParam, districtParam] = decodeURIComponent(
       location.pathname
     ).split("/");
     //網址有string也可查詢
@@ -138,11 +140,11 @@ function SelectSection(props) {
   return (
     <Box
       sx={{
-        padding: "0px 143.5px 0px 292.5px",
+        padding: { sm: "0px 143.5px 0px 292.5px" },
       }}
     >
       <Typography
-        fontSize="32px"
+        fontSize={{ xs: "25px", lg: "32px" }}
         fontWeight={400}
         fontFamily="Noto Sans TC"
         padding="16px 0"
@@ -161,69 +163,96 @@ function SelectSection(props) {
             padding: "40px 0",
           }}
         >
-          <Grid item xs={12} sm={4}>
-            <FormControl>
-              <InputLabel id="select-year">年份</InputLabel>
-              <Select
-                labelId="select-year"
-                value={year}
-                sx={{ zIndex: "100", width: "73px", height: "40px" }}
-                onChange={handleYearChange}
-                label="年份"
-              >
-                <MenuItem value={110}>110</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl>
-              <InputLabel id="select-county" shrink={true}>
-                縣/市
-              </InputLabel>
-              <Select
-                labelId="select-county"
+          <FormControl>
+            <InputLabel id="select-year">年份</InputLabel>
+            <Select
+              labelId="select-year"
+              value={year}
+              sx={{
+                zIndex: "100",
+                width: "73px",
+                height: "40px",
+                // margin: { xs: "8px" },
+              }}
+              onChange={handleYearChange}
+              label="年份"
+            >
+              <MenuItem value={110}>110</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl>
+            <InputLabel id="select-county" shrink={true}>
+              縣/市
+            </InputLabel>
+            <Select
+              labelId="select-county"
+              value={county}
+              sx={{
+                zIndex: "100",
+                width: { xs: "343px", lg: "165px" },
+                height: "40px",
+                // margin: { xs: "8px" },
+              }}
+              onChange={handleCountyChange}
+              label="縣/市"
+              displayEmpty
+            >
+              <MenuItem disabled value="" key="countyDefault">
+                <em>請選擇 縣/市</em>
+              </MenuItem>
+              {Object.values(groupedByCityData)
+                .map((item) => head(item).slice(0, 3))
+                .filter((item) => item !== "區域別")
+                .map((item) => (
+                  <MenuItem value={item} key={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+            </Select>
+            {/* <Autocomplete
+                id="county-autocomplete"
                 value={county}
-                sx={{ zIndex: "100", width: "165px", height: "40px" }}
-                onChange={handleCountyChange}
-                label="縣/市"
-                displayEmpty
-              >
-                <MenuItem disabled value="" key="countyDefault">
-                  <em>請選擇 縣/市</em>
-                </MenuItem>
-                {Object.values(groupedByCityData)
+                options={Object.values(groupedByCityData)
                   .map((item) => head(item).slice(0, 3))
-                  .map((item) => (
-                    <MenuItem value={item} key={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-            <FormControl>
-              <InputLabel id="select-district" shrink={true}>
-                區
-              </InputLabel>
-              <Select
-                labelId="select-district"
-                displayEmpty
-                disabled={!county}
-                label="區"
-                value={district}
-                sx={{ zIndex: "100", width: "165px", height: "40px" }}
-                onChange={handleDistrictChange}
-              >
-                <MenuItem disabled value="">
-                  <em>請先選擇 縣/市</em>
-                </MenuItem>
-                {uniq(groupedByCityData[county])
-                  .map((item) => item.replace([county], ""))
-                  .map((item) => (
-                    <MenuItem value={item} key={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
-          </Grid>
+                  .filter((item) => item !== "區域別")}
+                onChange={handleCountyChange}
+                renderInput={(params) => (
+                  <TextField {...params} label="縣/市" />
+                )}
+                renderOption={(option) => option}
+                // fullWidth
+              /> */}
+          </FormControl>
+          <FormControl>
+            <InputLabel id="select-district" shrink={true}>
+              區
+            </InputLabel>
+            <Select
+              labelId="select-district"
+              displayEmpty
+              disabled={!county}
+              label="區"
+              value={district}
+              sx={{
+                zIndex: "100",
+                width: { xs: "343px", lg: "165px" },
+                height: "40px",
+                // margin: { xs: "8px" },
+              }}
+              onChange={handleDistrictChange}
+            >
+              <MenuItem disabled value="">
+                <em>請先選擇 縣/市</em>
+              </MenuItem>
+              {uniq(groupedByCityData[county])
+                .map((item) => item.replace([county], ""))
+                .map((item) => (
+                  <MenuItem value={item} key={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
           <Button
             onClick={handleSubmit}
             disabled={submitDisabled}
@@ -231,9 +260,14 @@ function SelectSection(props) {
               zIndex: "100",
               width: { xs: "343px", lg: "83px" },
               height: "36.5px",
-              color: submitDisabled ? "rgba(0, 0, 0, 0.26)" : "#FFFFFF",
+              margin: { xs: "8px", lg: "0" },
+              color: submitDisabled
+                ? "rgba(0, 0, 0, 0.26)"
+                : theme.palette.secondary.light,
               borderRadius: "4px",
-              bgcolor: submitDisabled ? "rgba(0, 0, 0, 0.12)" : "#651FFF",
+              bgcolor: submitDisabled
+                ? "rgba(0, 0, 0, 0.12)"
+                : theme.palette.secondary.main,
             }}
           >
             SUBMIT
@@ -245,7 +279,7 @@ function SelectSection(props) {
           submit={submit}
           pieData={pieData}
           barData={barData}
-          title={`${year} ${county} ${district}`}
+          title={`${year}年 ${county} ${district}`}
         />
       )}
     </Box>
