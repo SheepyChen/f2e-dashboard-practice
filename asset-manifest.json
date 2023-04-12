@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/f2e-exam/static/css/main.a6145b68.css",
-    "main.js": "/f2e-exam/static/js/main.254e3e83.js",
+    "main.js": "/f2e-exam/static/js/main.d86bcb41.js",
     "index.html": "/f2e-exam/index.html",
     "main.a6145b68.css.map": "/f2e-exam/static/css/main.a6145b68.css.map",
-    "main.254e3e83.js.map": "/f2e-exam/static/js/main.254e3e83.js.map"
+    "main.d86bcb41.js.map": "/f2e-exam/static/js/main.d86bcb41.js.map"
   },
   "entrypoints": [
     "static/css/main.a6145b68.css",
-    "static/js/main.254e3e83.js"
+    "static/js/main.d86bcb41.js"
   ]
 }
