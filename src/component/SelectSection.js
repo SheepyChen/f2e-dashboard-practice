@@ -53,7 +53,9 @@ function SelectSection(props) {
   };
 
   const fetchPost = async () => {
-    const response = await fetch("/api");
+    const response = await fetch(
+      `https://government-data.onrender.com/${year}`
+    );
     if (!response.ok) {
       throw new Error("Something went wrong!");
     }
@@ -72,14 +74,16 @@ function SelectSection(props) {
     setGroupedByCityData(groupedByCity);
     setLoading(false);
   };
-
   useEffect(() => {
     fetchPost();
+  }, [year]);
+  useEffect(() => {
     const [, year, countyParam, districtParam] = decodeURIComponent(
       location.pathname
     ).split("/");
     //網址有string也可查詢
-    if (countyParam.length === 3 && districtParam.length === 3) {
+    if (countyParam && districtParam && year) {
+      fetchPost();
       setCounty(countyParam);
       setDistrict(districtParam);
       setSubmit(true);
@@ -160,120 +164,157 @@ function SelectSection(props) {
           sx={{
             height: "120px",
             width: "100%",
-            padding: "40px 0",
+            margin: "0 auto",
           }}
         >
-          <FormControl>
-            <InputLabel id="select-year">年份</InputLabel>
-            <Select
-              labelId="select-year"
-              value={year}
+          <Box
+            sx={{
+              padding: "40px 0",
+              display: { lg: "inline", xs: "inline-flex" },
+              flexDirection: { xs: "column" },
+              alignItems: { xs: "flex-start" },
+            }}
+          >
+            <FormControl
               sx={{
-                zIndex: "100",
-                width: "73px",
-                height: "40px",
-                // margin: { xs: "8px" },
+                margin: "8px",
               }}
-              onChange={handleYearChange}
-              label="年份"
             >
-              <MenuItem value={110}>110</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl>
-            <InputLabel id="select-county" shrink={true}>
-              縣/市
-            </InputLabel>
-            <Select
-              labelId="select-county"
-              value={county}
-              sx={{
-                zIndex: "100",
-                width: { xs: "343px", lg: "165px" },
-                height: "40px",
-                // margin: { xs: "8px" },
-              }}
-              onChange={handleCountyChange}
-              label="縣/市"
-              displayEmpty
-            >
-              <MenuItem disabled value="" key="countyDefault">
-                <em>請選擇 縣/市</em>
-              </MenuItem>
-              {Object.values(groupedByCityData)
-                .map((item) => head(item).slice(0, 3))
-                .filter((item) => item !== "區域別")
-                .map((item) => (
-                  <MenuItem value={item} key={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-            </Select>
-            {/* <Autocomplete
-                id="county-autocomplete"
+              <InputLabel
+                id="select-year"
+                sx={{
+                  backgroundColor: theme.palette.secondary.light,
+                  padding: "0 4px",
+                }}
+              >
+                年份
+              </InputLabel>
+              <Select
+                labelId="select-year"
+                value={year}
+                sx={{
+                  width: "73px",
+                  height: "40px",
+                }}
+                onChange={handleYearChange}
+                label="年份"
+              >
+                <MenuItem value={109}>109</MenuItem>
+                <MenuItem value={110}>110</MenuItem>
+                <MenuItem value={111}>111</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl sx={{ margin: "8px" }}>
+              <InputLabel
+                id="select-county"
+                shrink={true}
+                sx={{
+                  backgroundColor: theme.palette.secondary.light,
+                  padding: "0 4px",
+                }}
+              >
+                縣/市
+              </InputLabel>
+              <Select
+                labelId="select-county"
                 value={county}
+                sx={{
+                  width: { xs: "343px", lg: "165px" },
+                  height: "40px",
+                }}
+                onChange={handleCountyChange}
+                label="縣/市"
+                displayEmpty
+              >
+                <MenuItem disabled value="" key="countyDefault">
+                  <em>請選擇 縣/市</em>
+                </MenuItem>
+                {Object.values(groupedByCityData)
+                  .map((item) => head(item).slice(0, 3))
+                  .filter((item) => item !== "區域別")
+                  .map((item) => (
+                    <MenuItem value={item} key={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+              </Select>
+
+              {/* <Autocomplete
+                labelId="select-county"
+                size="small"
+                value={county ? county : "請選擇縣/市"}
+                disablePortal
+                sx={{
+                  width: { xs: "343px", lg: "165px" },
+                  fontSize: "14px",
+                }}
                 options={Object.values(groupedByCityData)
                   .map((item) => head(item).slice(0, 3))
                   .filter((item) => item !== "區域別")}
                 onChange={handleCountyChange}
-                renderInput={(params) => (
-                  <TextField {...params} label="縣/市" />
-                )}
-                renderOption={(option) => option}
-                // fullWidth
+                renderInput={(params) => <TextField {...params} label="" />}
               /> */}
-          </FormControl>
-          <FormControl>
-            <InputLabel id="select-district" shrink={true}>
-              區
-            </InputLabel>
-            <Select
-              labelId="select-district"
-              displayEmpty
-              disabled={!county}
-              label="區"
-              value={district}
+            </FormControl>
+            <FormControl sx={{ margin: "8px" }}>
+              <InputLabel
+                id="select-district"
+                shrink={true}
+                sx={{
+                  backgroundColor: theme.palette.secondary.light,
+                  padding: "0 4px",
+                }}
+              >
+                區
+              </InputLabel>
+              <Select
+                labelId="select-district"
+                displayEmpty
+                disabled={!county}
+                label="區"
+                value={district}
+                sx={{
+                  width: { xs: "343px", lg: "165px" },
+                  height: "40px",
+                }}
+                onChange={handleDistrictChange}
+              >
+                <MenuItem disabled value="">
+                  <em>請先選擇 縣/市</em>
+                </MenuItem>
+                {uniq(groupedByCityData[county])
+                  .map((item) => item.replace([county], ""))
+                  .map((item) => (
+                    <MenuItem value={item} key={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+              </Select>
+            </FormControl>
+            <Button
+              onClick={handleSubmit}
+              disabled={submitDisabled}
               sx={{
-                zIndex: "100",
-                width: { xs: "343px", lg: "165px" },
-                height: "40px",
-                // margin: { xs: "8px" },
+                width: { xs: "343px", lg: "83px" },
+                height: "36.5px",
+                margin: "8px",
+                color: submitDisabled
+                  ? "rgba(0, 0, 0, 0.26)"
+                  : theme.palette.secondary.light,
+                borderRadius: "4px",
+                "&:hover": {
+                  bgcolor: theme.palette.secondary.main,
+                },
+                bgcolor: submitDisabled
+                  ? "rgba(0, 0, 0, 0.12)"
+                  : theme.palette.secondary.main,
               }}
-              onChange={handleDistrictChange}
             >
-              <MenuItem disabled value="">
-                <em>請先選擇 縣/市</em>
-              </MenuItem>
-              {uniq(groupedByCityData[county])
-                .map((item) => item.replace([county], ""))
-                .map((item) => (
-                  <MenuItem value={item} key={item}>
-                    {item}
-                  </MenuItem>
-                ))}
-            </Select>
-          </FormControl>
-          <Button
-            onClick={handleSubmit}
-            disabled={submitDisabled}
-            sx={{
-              zIndex: "100",
-              width: { xs: "343px", lg: "83px" },
-              height: "36.5px",
-              margin: { xs: "8px", lg: "0" },
-              color: submitDisabled
-                ? "rgba(0, 0, 0, 0.26)"
-                : theme.palette.secondary.light,
-              borderRadius: "4px",
-              bgcolor: submitDisabled
-                ? "rgba(0, 0, 0, 0.12)"
-                : theme.palette.secondary.main,
-            }}
-          >
-            SUBMIT
-          </Button>
+              SUBMIT
+            </Button>
+          </Box>
         </Box>
       )}
+      <Box sx={{ height: { xs: "200px", lg: "0px" } }}></Box>
       {submit && (
         <Chart
           submit={submit}
