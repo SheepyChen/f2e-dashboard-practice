@@ -27,6 +27,20 @@ ChartJS.register(
 function Chart(props) {
   const { submit, pieData, barData, title } = props;
   const barOptions = {
+    scales: {
+      y: {
+        title: {
+          display: true,
+          text: "數量",
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: "型態",
+        },
+      },
+    },
     responsive: true,
     plugins: {
       legend: {
@@ -86,6 +100,7 @@ function Chart(props) {
             <Box
               sx={{
                 margin: "0 auto",
+                paddingBottom: "48px",
               }}
             >
               <Bar data={barData} options={barOptions} />
