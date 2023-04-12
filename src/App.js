@@ -73,7 +73,8 @@ function App() {
         </header>
         <Box
           sx={{
-            position: "absolute",
+            position: "fixed",
+            // position: "absolute",
             top: "300px",
             left: "5%",
             transform: "translate(-50%, +50%) rotate(90deg)",
