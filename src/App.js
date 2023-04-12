@@ -1,6 +1,6 @@
 import "./index.css";
 import React from "react";
-import { Button, Typography, Box } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import SelectSection from "./component/SelectSection";
@@ -34,14 +34,16 @@ function App() {
               bgcolor: theme.palette.secondary.main,
               width: "100%",
               height: "48px",
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
             <Box
               sx={{
                 color: theme.palette.secondary.light,
-                position: "absolute",
-                top: "15px",
-                left: "16px",
+                padding: "10px 16px",
               }}
             >
               <Typography fontSize="16px" fontWeight={700} fontFamily="Ubuntu">
@@ -50,19 +52,22 @@ function App() {
             </Box>
             <Box
               sx={{
-                color: theme.palette.secondary.light,
-                position: "absolute",
-                top: "4px",
-                right: "24px",
-                fontSize: "18px",
-                display: "flex",
-                alignItems: "center",
-                border: "1px solid #ccc",
-                borderRadius: "4px",
-                padding: "4px",
+                padding: "10px 16px",
               }}
             >
-              <SettingsOutlinedIcon />
+              <Box
+                sx={{
+                  color: theme.palette.secondary.light,
+                  display: "flex",
+                  alignItems: "center",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  padding: "7px",
+                  boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+                }}
+              >
+                <SettingsOutlinedIcon sx={{ width: "16px", height: "16px" }} />
+              </Box>
             </Box>
           </Box>
         </header>
@@ -81,7 +86,7 @@ function App() {
             WebkitTextFillColor: "transparent",
             opacity: {
               xs: "0.12",
-              sm: "0.8",
+              sm: "0.5",
               lg: "1",
             },
             backgroundClip: "text",
@@ -98,15 +103,6 @@ function App() {
           </Typography>
         </Box>
         <SelectSection theme={theme} />
-        {/* <footer>
-          <Box
-            sx={{
-              bgcolor: theme.palette.secondary.main,
-              width: "100%",
-              height: "20px",
-            }}
-          />
-        </footer> */}
       </ThemeProvider>
     </Box>
   );
