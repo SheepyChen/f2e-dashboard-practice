@@ -35,17 +35,20 @@ function SelectSection(props) {
   const location = useLocation();
 
   const handleYearChange = (event) => {
+    setSubmit(false);
     setYear(event.target.value);
   };
-  const handleCountyChange = (event) => {
-    setCounty(event.target.value);
-  };
-  const handleDistrictChange = (event) => {
+  const handleCountyChange = (event, newValue) => {
     setSubmit(false);
-    setDistrict(event.target.value);
+    setCounty(newValue);
+    setDistrict("");
+  };
+  const handleDistrictChange = (event, newValue) => {
+    setSubmit(false);
+    setDistrict(newValue);
   };
 
-  const submitDisabled = !county || !district;
+  const submitDisabled = !district;
   const handleSubmit = (event) => {
     event.preventDefault();
     setSubmit(true);
@@ -145,12 +148,12 @@ function SelectSection(props) {
     <Box
       sx={{
         padding: { sm: "0px 143.5px 0px 292.5px" },
+        fontFamily: "Noto Sans TC",
       }}
     >
       <Typography
         fontSize={{ xs: "25px", lg: "32px" }}
         fontWeight={400}
-        fontFamily="Noto Sans TC"
         padding="16px 0"
       >
         人口數、戶數按戶別及性別統計
@@ -194,7 +197,7 @@ function SelectSection(props) {
                 labelId="select-year"
                 value={year}
                 sx={{
-                  width: "73px",
+                  width: "75px",
                   height: "40px",
                 }}
                 onChange={handleYearChange}
@@ -216,7 +219,7 @@ function SelectSection(props) {
               >
                 縣/市
               </InputLabel>
-              <Select
+              {/* <Select
                 labelId="select-county"
                 value={county}
                 sx={{
@@ -238,23 +241,22 @@ function SelectSection(props) {
                       {item}
                     </MenuItem>
                   ))}
-              </Select>
-
-              {/* <Autocomplete
+              </Select> */}
+              <Autocomplete
                 labelId="select-county"
                 size="small"
                 value={county ? county : "請選擇縣/市"}
                 disablePortal
                 sx={{
-                  width: { xs: "343px", lg: "165px" },
-                  fontSize: "14px",
+                  width: { xs: "343px", lg: "175px" },
+                  textAlign: "center",
                 }}
                 options={Object.values(groupedByCityData)
                   .map((item) => head(item).slice(0, 3))
                   .filter((item) => item !== "區域別")}
                 onChange={handleCountyChange}
-                renderInput={(params) => <TextField {...params} label="" />}
-              /> */}
+                renderInput={(params) => <TextField {...params} />}
+              />
             </FormControl>
             <FormControl sx={{ margin: "8px" }}>
               <InputLabel
@@ -267,7 +269,7 @@ function SelectSection(props) {
               >
                 區
               </InputLabel>
-              <Select
+              {/* <Select
                 labelId="select-district"
                 displayEmpty
                 disabled={!county}
@@ -280,7 +282,7 @@ function SelectSection(props) {
                 onChange={handleDistrictChange}
               >
                 <MenuItem disabled value="">
-                  <em>請先選擇 縣/市</em>
+                  請先選擇 縣/市
                 </MenuItem>
                 {uniq(groupedByCityData[county])
                   .map((item) => item.replace([county], ""))
@@ -289,7 +291,21 @@ function SelectSection(props) {
                       {item}
                     </MenuItem>
                   ))}
-              </Select>
+              </Select> */}
+              <Autocomplete
+                labelId="select-district"
+                size="small"
+                value={district ? district : "請先選擇 縣/市"}
+                disablePortal
+                sx={{
+                  width: { xs: "343px", lg: "175px" },
+                }}
+                options={uniq(groupedByCityData[county]).map((item) =>
+                  item.replace([county], "")
+                )}
+                onChange={handleDistrictChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
             </FormControl>
             <Button
               onClick={handleSubmit}
