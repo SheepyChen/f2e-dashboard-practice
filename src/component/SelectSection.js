@@ -248,7 +248,7 @@ function SelectSection(props) {
                 value={county ? county : "請選擇縣/市"}
                 disablePortal
                 sx={{
-                  width: { xs: "343px", lg: "175px" },
+                  width: { xs: "343px", lg: "192px" },
                   textAlign: "center",
                 }}
                 options={Object.values(groupedByCityData)
@@ -295,10 +295,10 @@ function SelectSection(props) {
               <Autocomplete
                 labelId="select-district"
                 size="small"
-                value={district ? district : "請先選擇 縣/市"}
+                value={district ? district : "請先選擇縣/市"}
                 disablePortal
                 sx={{
-                  width: { xs: "343px", lg: "175px" },
+                  width: { xs: "343px", lg: "192px" },
                 }}
                 options={uniq(groupedByCityData[county]).map((item) =>
                   item.replace([county], "")
