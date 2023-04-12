@@ -1,8 +1,8 @@
 {
-  "name": "f2e-practice",
+  "name": "f2e-exam",
   "version": "0.1.0",
   "private": true,
-  "homepage": "",
+  "homepage": "https://sheepychen.github.io/f2e-exam",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",

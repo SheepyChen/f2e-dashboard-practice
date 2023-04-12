@@ -71,33 +71,37 @@ function Chart(props) {
           搜尋結果
         </Button>
       </Divider>
-      <Typography
-        fontSize="32px"
-        fontWeight={400}
-        fontFamily="Noto Sans TC"
-        padding="16px 0"
-      >
-        {title}
-      </Typography>
+      {submit && (
+        <Fragment>
+          <Typography
+            fontSize="32px"
+            fontWeight={400}
+            fontFamily="Noto Sans TC"
+            padding="16px 0"
+          >
+            {title}
+          </Typography>
 
-      {!isEmpty(barData) && submit && (
-        <Box
-          sx={{
-            margin: "0 auto",
-          }}
-        >
-          <Bar data={barData} options={barOptions} />
-        </Box>
-      )}
-      {!isEmpty(barData) && submit && (
-        <Box
-          sx={{
-            width: "80%",
-            margin: "0 auto",
-          }}
-        >
-          <Pie data={pieData} options={pieOptions} />
-        </Box>
+          {!isEmpty(barData) && submit && (
+            <Box
+              sx={{
+                margin: "0 auto",
+              }}
+            >
+              <Bar data={barData} options={barOptions} />
+            </Box>
+          )}
+          {!isEmpty(barData) && submit && (
+            <Box
+              sx={{
+                width: "80%",
+                margin: "0 auto",
+              }}
+            >
+              <Pie data={pieData} options={pieOptions} />
+            </Box>
+          )}
+        </Fragment>
       )}
     </Fragment>
   );

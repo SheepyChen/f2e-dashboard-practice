@@ -165,6 +165,7 @@ function SelectSection(props) {
             height: "120px",
             width: "100%",
             margin: "0 auto",
+            padding: "30px 0",
           }}
         >
           <Box
@@ -315,7 +316,7 @@ function SelectSection(props) {
         </Box>
       )}
       <Box sx={{ height: { xs: "200px", lg: "0px" } }}></Box>
-      {submit && (
+      {!loading && (
         <Chart
           submit={submit}
           pieData={pieData}
