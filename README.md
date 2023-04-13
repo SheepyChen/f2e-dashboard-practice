@@ -1,4 +1,29 @@
 # 簡易Dashboard製作
+# 完成作品網址：https://f2e-exam-sheepychen.vercel.app/
+
+## 實作過程：
+
+1.串接api拿資料 確認資料格式 建git repositoru
+
+備註：
+由於政府的api直接fetch會有cors的問題，原本在本機開發使用http-proxy-middleware
+但使用Render發布proxy server會拿不到資料，所以改成先下載幾個年度的資料再用server讀取
+
+2.切版：完成雛形
+
+3.詳細功能製作：
+
+ex:
+submit disable
+selector 換成autocomplete
+縣市還沒有選區disable
+年份不同重送api
+loading ui
+RWD設計
+
+4.Deploy proxy server & use vercel to live demo
+https://f2e-exam-sheepychen.vercel.app/
+
 
 ## 製作Requirements:
 
@@ -25,24 +50,4 @@ The charts example in Figma are images because there are no restrictions on how 
 * RWD:
 In Figma, only two sizes are specified, so the general principle for implementing other screen sizes is to avoid breaking the layout
 
-## 實作過程：
 
-1.串接api拿資料 確認資料格式 建git repositoru
-
-備註：
-由於政府的api直接fetch會有cors的問題，原本在本機開發使用http-proxy-middleware
-但使用Render發布proxy server會拿不到資料，所以改成先下載幾個年度的資料再用server讀取
-
-2.切版：完成雛形
-
-3.詳細功能製作：
-
-ex:
-submit disable
-selector 換成autocomplete
-縣市還沒有選區disable
-年份不同重送api
-loading ui
-RWD設計
-
-4.Deploy proxy server & gitgub page
