@@ -76,7 +76,7 @@ function App() {
             position: "fixed",
             // position: "absolute",
             top: "300px",
-            left: "5%",
+            left: "0%",
             transform: "translate(-50%, +50%) rotate(90deg)",
             display: "inline-block",
             width: "971px",
