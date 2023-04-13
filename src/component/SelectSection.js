@@ -81,7 +81,7 @@ function SelectSection(props) {
     fetchPost();
   }, [year]);
   useEffect(() => {
-    const [, year, countyParam, districtParam] = decodeURIComponent(
+    const [, yearParam, countyParam, districtParam] = decodeURIComponent(
       location.pathname
     ).split("/");
     //網址有string也可查詢
@@ -89,6 +89,7 @@ function SelectSection(props) {
       fetchPost();
       setCounty(countyParam);
       setDistrict(districtParam);
+      setYear(yearParam);
       setSubmit(true);
     }
   }, []);
@@ -203,9 +204,9 @@ function SelectSection(props) {
                 onChange={handleYearChange}
                 label="年份"
               >
-                <MenuItem value={109}>109</MenuItem>
-                <MenuItem value={110}>110</MenuItem>
-                <MenuItem value={111}>111</MenuItem>
+                <MenuItem value={"109"}>109</MenuItem>
+                <MenuItem value={"110"}>110</MenuItem>
+                <MenuItem value={"111"}>111</MenuItem>
               </Select>
             </FormControl>
             <FormControl sx={{ margin: "8px" }}>
