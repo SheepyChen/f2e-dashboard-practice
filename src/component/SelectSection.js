@@ -297,6 +297,7 @@ function SelectSection(props) {
                 labelId="select-district"
                 size="small"
                 value={district ? district : "請先選擇縣/市"}
+                disabled={!county}
                 disablePortal
                 sx={{
                   width: { xs: "343px", lg: "192px" },
